@@ -48,19 +48,19 @@ def move(game_state: typing.Dict) -> typing.Dict:
     # [[{'x': 0, 'y': 0}, {'x': 0, 'y': 1}, ... , {'x': 9, 'y': 9}]
     board_width = game_state['board']['width']
     board_height = game_state['board']['height']
-    all_nodes = []
-    for x in range(board_width):
-        for y in range(board_height):
-            all_nodes.append({"x": x, "y": y})
+    # all_nodes = []
+    # for x in range(board_width):
+    #     for y in range(board_height):
+    #         all_nodes.append({"x": x, "y": y})
     # print(all_cells)
 
-    print("=== Restarting; new move ===")
+    # print("=== Restarting; new move ===")
     is_move_safe = {"up": True, "down": True, "left": True, "right": True}
     # We've included code to prevent your Battlesnake from moving backwards
     my_head = game_state["you"]["body"][0]  # Coordinates of your head
     my_neck = game_state["you"]["body"][1]  # Coordinates of your "neck"
-    print("my_head:", my_head)
-    print("my_neck:", my_neck)
+    # print("my_head:", my_head)
+    # print("my_neck:", my_neck)
     if my_neck["x"] < my_head["x"]:  # Neck is left of head, don't move left
         is_move_safe["left"] = False
 
@@ -72,7 +72,7 @@ def move(game_state: typing.Dict) -> typing.Dict:
 
     elif my_neck["y"] > my_head["y"]:  # Neck is above head, don't move up
         is_move_safe["up"] = False
-    print("Safe Moves after Step 0: ", is_move_safe)
+    # print("Safe Moves after Step 0: ", is_move_safe)
     # TODO: Step 1 - Prevent your Battlesnake from moving out of bounds
 
     # print(f"Board Width: {board_width} and Board Height: {board_height}")
@@ -90,7 +90,7 @@ def move(game_state: typing.Dict) -> typing.Dict:
     elif my_head["x"] == board_width - 1:
         is_move_safe["right"] = False
 
-    print("Safe Moves after Step 1: ", is_move_safe)
+    # print("Safe Moves after Step 1: ", is_move_safe)
     # if 0 < my_head["x"] < board_width - 1:
     #     is_head_at_edge = False
     # if 0 < my_head["y"] < board_width - 1:
@@ -102,7 +102,7 @@ def move(game_state: typing.Dict) -> typing.Dict:
     #     # prev_move = "down"
     # Go through each segment and determine if segment is adjacent to head
     for segment in my_body:
-        print("Segment: ", segment)
+        # print("Segment: ", segment)
         # remove node from all_nodes
         # del all_nodes[all_nodes.index(segment)]
 
@@ -142,7 +142,7 @@ def move(game_state: typing.Dict) -> typing.Dict:
     if len(safe_moves) == 0:
         print(f"MOVE {game_state['turn']}: No safe moves detected! Moving down")
         return {"move": "down"}
-    print("Free Cells:", all_nodes)
+    # print("Free Cells:", all_nodes)
     # What I'm trying to reference for a search algorithm:
     # https://www.redblobgames.com/pathfinding/tower-defense/#:~:text=Let%E2%80%99s,article.
     # https://www.redblobgames.com/pathfinding/grids/graphs.html
@@ -160,7 +160,7 @@ def move(game_state: typing.Dict) -> typing.Dict:
     #             result.append(direction)
     #     return result
 
-    frontier = []
+    # frontier = []
     # reached = dict()
     # while not frontier:
     #     current = frontier.index(0)
