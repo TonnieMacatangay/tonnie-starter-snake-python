@@ -22,10 +22,10 @@ def info() -> typing.Dict:
 
     return {
         "apiversion": "1",
-        "author": "",  # TODO: Your Battlesnake Username
-        "color": "#32a852",  # TODO: Choose color
-        "head": "eel",  # TODO: Choose head
-        "tail": "do-sammy",  # TODO: Choose tail
+        "author": "TonnieM",
+        "color": "#32a852",
+        "head": "eel",
+        "tail": "do-sammy",
     }
 
 
@@ -43,6 +43,17 @@ def end(game_state: typing.Dict):
 # Valid moves are "up", "down", "left", or "right"
 # See https://docs.battlesnake.com/api/example-move for available data
 def move(game_state: typing.Dict) -> typing.Dict:
+    # Create a list of dictionaries;
+    # Basically maps out the grid into coodinates
+    # [[{'x': 0, 'y': 0}, {'x': 0, 'y': 1}, ... , {'x': 9, 'y': 9}]
+    board_width = game_state['board']['width']
+    board_height = game_state['board']['height']
+    all_nodes = []
+    for x in range(board_width):
+        for y in range(board_height):
+            all_nodes.append({"x": x, "y": y})
+    # print(all_cells)
+
     print("=== Restarting; new move ===")
     is_move_safe = {"up": True, "down": True, "left": True, "right": True}
     # We've included code to prevent your Battlesnake from moving backwards
@@ -63,30 +74,21 @@ def move(game_state: typing.Dict) -> typing.Dict:
         is_move_safe["up"] = False
     print("Safe Moves after Step 0: ", is_move_safe)
     # TODO: Step 1 - Prevent your Battlesnake from moving out of bounds
-    board_width = game_state['board']['width']
-    board_height = game_state['board']['height']
+
     # print(f"Board Width: {board_width} and Board Height: {board_height}")
     is_head_at_edge = False
     if my_head["y"] == board_height - 1:
-        print(f"my_head[\"y\"]: {my_head["y"]}")
         is_move_safe["up"] = False
-        is_head_at_edge = True
-        print("Head at top!")
+        # print(f"my_head[\"y\"]: {my_head["y"]}")
+        # print("Head at top!")
     elif my_head["y"] == 0:
-        print(f"my_head[\"y\"]: {my_head["y"]}")
         is_move_safe["down"] = False
-        is_head_at_edge = True
-        print("Head at bottom!")
+
     if my_head["x"] == 0:
-        print(f"my_head[\"x\"]: {my_head["x"]}")
         is_move_safe["left"] = False
-        is_head_at_edge = True
-        print("Head at left!")
+
     elif my_head["x"] == board_width - 1:
-        print(f"my_head[\"x\"]: {my_head["x"]}")
         is_move_safe["right"] = False
-        is_head_at_edge = True
-        print("Head at right!")
 
     print("Safe Moves after Step 1: ", is_move_safe)
     # if 0 < my_head["x"] < board_width - 1:
@@ -101,6 +103,9 @@ def move(game_state: typing.Dict) -> typing.Dict:
     # Go through each segment and determine if segment is adjacent to head
     for segment in my_body:
         print("Segment: ", segment)
+        # remove node from all_nodes
+        # del all_nodes[all_nodes.index(segment)]
+
         if (segment["x"] == my_head["x"] + 1) and (segment["y"] == my_head["y"]):
             is_move_safe["right"] = False
         elif (segment["x"] == my_head["x"] - 1) and (segment["y"] == my_head["y"]):
@@ -114,7 +119,11 @@ def move(game_state: typing.Dict) -> typing.Dict:
     opponents = game_state['board']['snakes']
     for snake in opponents:
         for segment in snake["body"]:
-            print("Segment: ", segment)
+            # print("Segment: ", segment)
+            # print("Segment: ", segment)
+            # remove node from all_nodes
+            # del all_nodes[all_nodes.index(segment)]
+
             if (segment["x"] == my_head["x"] + 1) and (segment["y"] == my_head["y"]):
                 is_move_safe["right"] = False
             elif (segment["x"] == my_head["x"] - 1) and (segment["y"] == my_head["y"]):
@@ -133,16 +142,40 @@ def move(game_state: typing.Dict) -> typing.Dict:
     if len(safe_moves) == 0:
         print(f"MOVE {game_state['turn']}: No safe moves detected! Moving down")
         return {"move": "down"}
+    print("Free Cells:", all_nodes)
+    # What I'm trying to reference for a search algorithm:
+    # https://www.redblobgames.com/pathfinding/tower-defense/#:~:text=Let%E2%80%99s,article.
+    # https://www.redblobgames.com/pathfinding/grids/graphs.html
+    # def neighbors(node):
+    #     # All directions from my_head
+    #     directions = [
+    #         [my_head["x"] + 1, my_head["y"]],
+    #         [my_head["x"], my_head["y"] + 1],
+    #         [my_head["x"] - 1, my_head["y"]],
+    #         [my_head["x"], my_head["y"] - 1]]
+    #     result = []
+    #     # Check each direction if valid
+    #     for direction in directions:
+    #         if direction in all_nodes:
+    #             result.append(direction)
+    #     return result
+
+    frontier = []
+    # reached = dict()
+    # while not frontier:
+    #     current = frontier.index(0)
+    #     for next in
+    #
 
     # Choose a random move from the safe ones
     next_move = random.choice(safe_moves)
-    previous_move = next_move  # for next run
+    # previous_move = next_move  # for next run
 
     # TODO: Step 4 - Move towards food instead of random, to regain health and survive longer
     # food = game_state['board']['food']
     print(f"All possible moves: {safe_moves}")
     print(f"MOVE {game_state['turn']}: {next_move}")
-    print() # new line
+    print()  # new line
     return {"move": next_move}
 
 
